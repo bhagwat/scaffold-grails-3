@@ -1,0 +1,29 @@
+plugins {
+    id "com.moowork.node" version "0.12"
+    id "com.moowork.gulp" version "0.12"
+}
+apply plugin: 'base'
+
+gulp {
+    workDir = project.projectDir
+    colors = true
+    bufferOutput = false
+}
+
+node {
+    version = project.nodejsVersion
+    download = true
+}
+
+npm_install.doFirst {
+    new File(project.projectDir, "bower_components").mkdirs()
+    args = ['--unsafe-perm'] //npm install by root user on server
+}
+
+task installBower(type: NpmTask) {
+    args = ['install', 'bower', '--save-dev']
+}
+
+npm_install.dependsOn npm_cache_clean, installBower
+installGulp.dependsOn npm_install
+gulp_build.dependsOn installGulp

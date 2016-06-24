@@ -1,0 +1,12 @@
+node_modules/
+bower_components/
+.sass-cache/
+.tmp/
+.gradle/
+build/
+dist/
+nodejs/
+.idea/
+.publish/
+*.iml
+.idea
