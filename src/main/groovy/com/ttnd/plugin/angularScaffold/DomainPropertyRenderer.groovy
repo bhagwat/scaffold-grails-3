@@ -52,7 +52,7 @@ class DomainPropertyRenderer {
         properties
     }
 
-    public Writer render() {
+    public Writer renderEdit() {
         Writer out = new StringWriter()
         if (property.type == Boolean || property.type == boolean)
             out << renderBooleanEditor()
@@ -85,6 +85,40 @@ class DomainPropertyRenderer {
             }
         } else if (property.oneToMany) {
             out << renderOneToMany()
+        }
+        out
+    }
+
+    public Writer renderRead() {
+        Writer out = new StringWriter()
+        if (property.type == Boolean || property.type == boolean)
+            out << "${domainInstanceName}.${property.name}|asBoolean"
+        else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean))
+            out << "${domainInstanceName}.${property.name}|number"
+        else if (property.type == String)
+            out << "${domainInstanceName}.${property.name}"
+        else if (property.type == Date || property.type == java.sql.Date || property.type == Time || property.type == Calendar)
+            out << "${domainInstanceName}.${property.name}|date"
+        else if (property.type == URL)
+            out << "${domainInstanceName}.${property.name}"
+        else if (property.type && property.isEnum())
+            out << "${domainInstanceName}.${property.name}|asEnum"
+        else if (property.type == TimeZone)
+            out << "${domainInstanceName}.${property.name}"
+        else if (property.type == Locale)
+            out << "${domainInstanceName}.${property.name}"
+        else if (property.type == Currency)
+            out << renderSelectTypeEditor("currency")
+        else if (property.type == ([] as Byte[]).class) //TODO: Bug in groovy means i have to do this :(
+            out << "${domainInstanceName}.${property.name}"
+        else if (property.type == ([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
+            out << ""
+        else if (property.manyToOne || property.oneToOne)
+            out << ""
+        else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
+            out << ""
+        } else if (property.oneToMany) {
+            out << ""
         }
         out
     }
@@ -273,6 +307,8 @@ class DomainPropertyRenderer {
     private String renderDateEditor() {
         scaffoldTemplateCache.renderAsHTML(attributes: [
                 "type"                : "text",
+                "id"                  : property.name,
+                "name"                : property.name,
                 "uib-datepicker-popup": "yyyy-MM-dd",
                 "is-open"             : "formCtrl.datePopupOpen.${property.name}",
                 "data-ng-click"       : "formCtrl.datePopupOpen.${property.name}=!formCtrl.datePopupOpen.${property.name}"
@@ -312,7 +348,7 @@ class DomainPropertyRenderer {
         scaffoldTemplateCache.renderAsHTML(attributes: attributes, options: options, "widget/selectbox",)
     }
 
-    private boolean isRequired() {
+    public boolean isRequired() {
         !isOptional()
     }
 

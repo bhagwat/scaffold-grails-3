@@ -26,23 +26,13 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
     private final String SOURCE_TEMPLATE_META_INF_PATH = "classpath:META-INF/templates/angular/"
     private final String PUBLIC_FOLDER = "/public/src/app/"
 
-    public StringWriter renderAsString(Map model, String source) {
-        return render(scaffoldGStringTemplateEngine, model, source)
-    }
-
     public File renderAsString(Map model, String source, String destinationFilePath) {
         Writable writable = getWritable(scaffoldGStringTemplateEngine, model, source)
         saveGeneratedTemplate(destinationFilePath, writable)
     }
 
     public StringWriter renderAsHTML(Map model, String source) {
-//        return render(new MarkupTemplateEngine(), model, source)
         return render(scaffoldMarkupTemplateEngine, model, source)
-    }
-
-    public File renderAsHTML(Map model, String source, String destination) {
-        Writable writable = getWritable(scaffoldMarkupTemplateEngine, model, source)
-        saveGeneratedTemplate(destination, writable)
     }
 
     private StringWriter render(TemplateEngine templateEngine, Map model, String source) {
@@ -58,7 +48,7 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
     private Resource getResource(String path) {
         Resource resource = new FileSystemResource(new File(BuildSettings.BASE_DIR, "${SOURCE_TEMPLATE_FOLDER_PATH}${path}.tpl"))
         if (!resource.exists()) {
-            resource = resourceLoader.getResource("${SOURCE_TEMPLATE_META_INF_PATH}${path}.tpl")
+            resource = resourceLoader.getResource("${SOURCE_TEMPLATE_META_INF_PATH}${path}.gsp")
         }
         if (!resource.exists()) {
             throw new FileNotFoundException("Requested template ${path} does not found.")

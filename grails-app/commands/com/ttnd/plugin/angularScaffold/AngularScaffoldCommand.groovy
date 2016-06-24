@@ -39,9 +39,10 @@ class AngularScaffoldCommand implements ApplicationCommand {
         grailsDomainClasses.each { GrailsDomainClass grailsDomainClass ->
             println "Generating angular artifacts for domain for ${grailsDomainClass.naturalName} ..."
             List<DomainPropertyRenderer> domainProperties = DomainPropertyRenderer.getDomainProperties(grailsDomainClass, scaffoldTemplateCache, markupTemplateEngine)
-            scaffoldTemplateCache.renderAsString(fields: domainProperties, "list",
+            Map model = [domainClass: grailsDomainClass, className: grailsDomainClass.naturalName, propertyName: grailsDomainClass.propertyName, fields: domainProperties]
+            scaffoldTemplateCache.renderAsString(model, "list",
                     "modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.list.html")
-            scaffoldTemplateCache.renderAsString(fields: domainProperties, "form",
+            scaffoldTemplateCache.renderAsString(model, "form",
                     "modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.form.html")
         }
         return true
