@@ -92,7 +92,7 @@ class DomainPropertyRenderer {
     public Writer renderRead() {
         Writer out = new StringWriter()
         if (property.type == Boolean || property.type == boolean)
-            out << "${domainInstanceName}.${property.name}|asBoolean"
+            out << "${domainInstanceName}.${property.name}" //TODO: as asBoolean filter
         else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean))
             out << "${domainInstanceName}.${property.name}|number"
         else if (property.type == String)
@@ -102,13 +102,13 @@ class DomainPropertyRenderer {
         else if (property.type == URL)
             out << "${domainInstanceName}.${property.name}"
         else if (property.type && property.isEnum())
-            out << "${domainInstanceName}.${property.name}|asEnum"
+            out << "${domainInstanceName}.${property.name}" //TODO: asEnum filter
         else if (property.type == TimeZone)
             out << "${domainInstanceName}.${property.name}"
         else if (property.type == Locale)
             out << "${domainInstanceName}.${property.name}"
         else if (property.type == Currency)
-            out << renderSelectTypeEditor("currency")
+            out << renderSelectTypeEditor("currency")  //TODO: as currency filter
         else if (property.type == ([] as Byte[]).class) //TODO: Bug in groovy means i have to do this :(
             out << "${domainInstanceName}.${property.name}"
         else if (property.type == ([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
