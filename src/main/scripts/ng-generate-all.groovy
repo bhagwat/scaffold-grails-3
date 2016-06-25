@@ -1,7 +1,7 @@
-description("Generates Angular artifacts for a domain class") {
+description("Generates Angular module with the CRUD artifacts for a domain class") {
     usage "grails ng-generate-all [NAME]"
     completer org.grails.cli.interactive.completers.DomainClassCompleter
-    argument name: 'Domain Class', description: "The name of the Domain class to generate artifacts for", required: true
+    argument name: 'Domain Class', description: "Domain class to create required module angular artifact", required: true
     flag name: 'force', description: "Whether to overwrite existing files"
 }
 
