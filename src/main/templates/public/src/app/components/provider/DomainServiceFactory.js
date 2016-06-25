@@ -9,7 +9,7 @@
                     save: {method: 'POST', params: {action: 'save'}},
                     read: {method: 'GET', params: {action: 'show'}},
                     delete: {method: 'DELETE', params: {action: 'delete'}},
-                    list: {method: 'GET', params: {action: 'list'}}
+                    list: {method: 'GET', params: {action: 'index'}}
                 };
                 angular.extend(resourceActions, actions);
 
