@@ -6,6 +6,7 @@ import groovy.text.TemplateEngine
 import groovy.text.markup.MarkupTemplateEngine
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
@@ -22,9 +23,11 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
     @Autowired
     MarkupTemplateEngine scaffoldMarkupTemplateEngine
 
+    @Value('${ng-scaffold.base.dir:public}')
+    String publicBaseDir
+
     private final String SOURCE_TEMPLATE_FOLDER_PATH = "src/main/templates/angular/"
     private final String SOURCE_TEMPLATE_META_INF_PATH = "classpath:META-INF/templates/angular/"
-    private final String PUBLIC_FOLDER = "/public/src/app/"
 
     public File renderAsString(Map model, String source, String destinationFilePath) {
         Writable writable = getWritable(scaffoldGStringTemplateEngine, model, source)
@@ -65,9 +68,17 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
     }
 
     private File findOrCreateDestinationFile(String destinationFilePath) {
-        String absoluteFilePath = BuildSettings.BASE_DIR.absolutePath + PUBLIC_FOLDER + destinationFilePath
+        String absoluteFilePath = publicBasePath + destinationFilePath
         File destinationFile = new File(absoluteFilePath)
         destinationFile.parentFile.mkdirs()
         destinationFile
+    }
+
+    private String getPublicBasePath() {
+        String basePath = BuildSettings.BASE_DIR.absolutePath + publicBaseDir
+        if (!basePath.endsWith(File.separator)) {
+            basePath = basePath + File.separator
+        }
+        return basePath
     }
 }
