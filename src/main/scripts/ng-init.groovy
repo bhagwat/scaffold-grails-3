@@ -3,6 +3,13 @@ import org.grails.io.support.UrlResource
 description("Copies angular resources in public folder of project root dir") {
     usage "grails ng-init"
 }
+description("""Copies angular resources in 'public' or the folder path specified in config property 'ng-scaffold.base.dir' of project root dir""") {
+    usage "grails ng-init"
+    flag name: 'force', description: "Whether to overwrite existing files"
+}
+
+model = model(args[0])
+def overwrite = flag('force') ? true : false
 
 consoleLogger.addStatus("Copying angular resources...")
 

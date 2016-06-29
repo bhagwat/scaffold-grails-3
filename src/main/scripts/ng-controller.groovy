@@ -6,7 +6,7 @@ description("Generates Angular artifacts for a domain class") {
 }
 
 def model = model(args[0])
-boolean overwrite = flag('force')
+def overwrite = flag('force') ? true : false
 
 render template: "angular/form.controller.gsp",
         destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.form.controller.js"),
@@ -14,4 +14,5 @@ render template: "angular/form.controller.gsp",
 
 render template: "angular/list.controller.gsp",
         destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.list.controller.js"),
-        model: model
+        model: model,
+        overwrite: overwrite

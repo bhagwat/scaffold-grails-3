@@ -6,7 +6,9 @@ description("Generates Angular artifacts for a domain class") {
 }
 
 model = model(args[0])
+def overwrite = flag('force') ? true : false
 
 render template: "angular/resource.gsp",
         destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.resource.js"),
-        model: model
+        model: model,
+        overwrite: overwrite
