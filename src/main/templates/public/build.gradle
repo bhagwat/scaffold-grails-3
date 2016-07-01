@@ -27,3 +27,4 @@ task installBower(type: NpmTask) {
 npm_install.dependsOn npm_cache_clean, installBower
 installGulp.dependsOn npm_install
 gulp_build.dependsOn installGulp
+gulp_serve.dependsOn installGulp

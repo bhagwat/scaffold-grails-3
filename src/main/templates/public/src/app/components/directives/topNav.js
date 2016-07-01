@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app')
+angular.module("${moduleName}")
     .directive('topNav', [function () {
         return {
             restrict: 'E',

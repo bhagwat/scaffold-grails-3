@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-angular.module('app')
+angular.module("$moduleName")
     .config(["navServiceProvider", function (navServiceProvider) {
         var base = "app/modules/${propertyName}/views/";
 

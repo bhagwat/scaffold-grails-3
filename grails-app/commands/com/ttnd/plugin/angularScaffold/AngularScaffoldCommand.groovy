@@ -6,6 +6,7 @@ import grails.dev.commands.ApplicationCommand
 import grails.dev.commands.ExecutionContext
 import groovy.text.markup.MarkupTemplateEngine
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 
 class AngularScaffoldCommand implements ApplicationCommand {
     @Autowired
@@ -16,6 +17,12 @@ class AngularScaffoldCommand implements ApplicationCommand {
 
     @Autowired
     MarkupTemplateEngine markupTemplateEngine
+
+    @Value('${ng-scaffold.module.name}')
+    String moduleName
+
+    @Value('${ng-scaffold.module.description}')
+    String moduleDescription
 
     boolean handle(ExecutionContext ctx) {
         String[] args = ctx.commandLine.remainingArgsArray
@@ -39,7 +46,14 @@ class AngularScaffoldCommand implements ApplicationCommand {
         grailsDomainClasses.each { GrailsDomainClass grailsDomainClass ->
             println "Generating angular artifacts for domain for ${grailsDomainClass.naturalName} ..."
             List<DomainPropertyRenderer> domainProperties = DomainPropertyRenderer.getDomainProperties(grailsDomainClass, scaffoldTemplateCache, markupTemplateEngine)
-            Map model = [domainClass: grailsDomainClass, className: grailsDomainClass.naturalName, propertyName: grailsDomainClass.propertyName, fields: domainProperties]
+            Map model = [
+                    domainClass      : grailsDomainClass,
+                    className        : grailsDomainClass.naturalName,
+                    propertyName     : grailsDomainClass.propertyName,
+                    fields           : domainProperties,
+                    moduleName       : moduleName,
+                    moduleDescription: moduleDescription
+            ]
             scaffoldTemplateCache.renderAsString(model, "list",
                     "modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.list.html")
             scaffoldTemplateCache.renderAsString(model, "form",

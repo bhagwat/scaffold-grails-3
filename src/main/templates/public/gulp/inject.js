@@ -4,7 +4,7 @@ var gulp = require('gulp');
 
 var paths = gulp.paths;
 
-var $ = require('gulp-load-plugins')();
+var dollor = require('gulp-load-plugins')();
 
 var wiredep = require('wiredep').stream;
 
@@ -18,7 +18,7 @@ gulp.task('inject', ['styles'], function () {
         paths.src + '/{app,components,modules}/**/*.js',
         '!' + paths.src + '/{app,components,modules}/**/*.spec.js',
         '!' + paths.src + '/{app,components,modules}/**/*.mock.js'
-    ]).pipe($.angularFilesort());
+    ]).pipe(dollor.angularFilesort());
 
     var injectOptions = {
         ignorePath: [paths.src, paths.tmp + '/serve'],
@@ -26,12 +26,11 @@ gulp.task('inject', ['styles'], function () {
     };
 
     var wiredepOptions = {
-//        exclude: [/bootstrap\.css/, /foundation\.css/]
     };
 
     return gulp.src(paths.src + '/*.html')
-        .pipe($.inject(injectStyles, injectOptions))
-        .pipe($.inject(injectScripts, injectOptions))
+        .pipe(dollor.inject(injectStyles, injectOptions))
+        .pipe(dollor.inject(injectScripts, injectOptions))
         .pipe(wiredep(wiredepOptions))
         .pipe(gulp.dest(paths.tmp + '/serve'));
 });

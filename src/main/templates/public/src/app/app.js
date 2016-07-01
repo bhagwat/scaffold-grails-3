@@ -29,9 +29,10 @@ var MenuItem = function (index) {
 
 (function () {
     'use strict';
-    angular.module('app', ['ngResource', 'ngAnimate', 'toastr', 'ui.bootstrap', 'ui.router','mwl.confirm'])
-        .config(["$urlRouterProvider", "$stateProvider", "navServiceProvider", function ($urlRouterProvider, $stateProvider, navServiceProvider) {
-            navServiceProvider.setStateProvider($stateProvider);
+    angular.module("${moduleName}", ['ngResource', 'ngAnimate', 'toastr', 'ui.bootstrap', 'ui.router','mwl.confirm'])
+        .config(["\$urlRouterProvider", "\$stateProvider", "navServiceProvider",
+            function (\$urlRouterProvider, \$stateProvider, navServiceProvider) {
+            navServiceProvider.setStateProvider(\$stateProvider);
             navServiceProvider.setRoot(
                 new MenuItem(10)
                     .setState('home', {
@@ -40,7 +41,7 @@ var MenuItem = function (index) {
                         icon: 'home'
                     })
             );
-            $urlRouterProvider.when('', '/person/list');
+            \$urlRouterProvider.when('', '/');
         }])
         .constant('_', window._)
         .service("Configuration", [function () {

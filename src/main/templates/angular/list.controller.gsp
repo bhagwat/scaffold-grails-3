@@ -1,7 +1,7 @@
 (function () {
      'use strict';
 
-angular.module('app')
+angular.module("$moduleName")
 .controller("${className}ListCtrl",
     ["${className}", "\$state", "toastr",
         function (${className}, \$state, toastr) {

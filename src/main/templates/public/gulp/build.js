@@ -5,7 +5,7 @@ var bower = require('gulp-bower');
 
 var paths = gulp.paths;
 
-var $ = require('gulp-load-plugins')({
+var dollor = require('gulp-load-plugins')({
     pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
@@ -27,9 +27,9 @@ gulp.task('partials', function () {
         paths.src + '/{app,components,modules}/**/*.html',
         paths.tmp + '/{app,components,modules}/**/*.html'
     ])
-        .pipe($.minifyHtml(minifyHtmlOptions))
-        .pipe($.angularTemplatecache('templateCacheHtml.js', {
-            module: 'angularMaterialAdmin'
+        .pipe(dollor.minifyHtml(minifyHtmlOptions))
+        .pipe(dollor.angularTemplatecache('templateCacheHtml.js', {
+            module: "${moduleName}Admin"
         }))
         .pipe(gulp.dest(paths.tmp + '/partials/'));
 });
@@ -42,30 +42,30 @@ gulp.task('html', ['inject', 'partials'], function () {
         addRootSlash: false
     };
 
-    var htmlFilter = $.filter('*.html');
-    var jsFilter = $.filter('**/*.js');
-    var cssFilter = $.filter('**/*.css');
+    var htmlFilter = dollor.filter('*.html');
+    var jsFilter = dollor.filter('**/*.js');
+    var cssFilter = dollor.filter('**/*.css');
     var assets;
 
     return gulp.src(paths.tmp + '/serve/*.html')
-        .pipe($.inject(partialsInjectFile, partialsInjectOptions))
-        .pipe(assets = $.useref.assets())
-        .pipe($.rev())
+        .pipe(dollor.inject(partialsInjectFile, partialsInjectOptions))
+        .pipe(assets = dollor.useref.assets())
+        .pipe(dollor.rev())
         .pipe(jsFilter)
-        .pipe($.ngAnnotate())
-        .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
+        .pipe(dollor.ngAnnotate())
+        .pipe(dollor.uglify({preserveComments: dollor.uglifySaveLicense}))
         .pipe(jsFilter.restore())
         .pipe(cssFilter)
-        .pipe($.csso())
+        .pipe(dollor.csso())
         .pipe(cssFilter.restore())
         .pipe(assets.restore())
-        .pipe($.useref())
-        .pipe($.revReplace())
+        .pipe(dollor.useref())
+        .pipe(dollor.revReplace())
         .pipe(htmlFilter)
-        .pipe($.minifyHtml(minifyHtmlOptions))
+        .pipe(dollor.minifyHtml(minifyHtmlOptions))
         .pipe(htmlFilter.restore())
         .pipe(gulp.dest(paths.dist + '/'))
-        .pipe($.size({title: paths.dist + '/', showFiles: true}));
+        .pipe(dollor.size({title: paths.dist + '/', showFiles: true}));
 });
 
 gulp.task('images', function () {
@@ -74,9 +74,9 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-    return gulp.src($.mainBowerFiles())
-        .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
-        .pipe($.flatten())
+    return gulp.src(dollor.mainBowerFiles())
+        .pipe(dollor.filter('**/*.{eot,svg,ttf,woff}'))
+        .pipe(dollor.flatten())
         .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
@@ -86,7 +86,7 @@ gulp.task('misc', function () {
 });
 
 gulp.task('clean', function (done) {
-    $.del([paths.dist + '/', paths.tmp + '/'], done);
+    dollor.del([paths.dist + '/', paths.tmp + '/'], done);
 });
 
 gulp.task('build', ['bower', 'html', 'images', 'fonts', 'misc']);

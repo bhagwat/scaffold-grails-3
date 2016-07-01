@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 
-angular.module("public")
+angular.module("${moduleName}")
     .directive("${propertyName}", [function () {
         return {
             restrict: 'A',

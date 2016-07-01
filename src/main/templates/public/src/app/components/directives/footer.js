@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app')
+angular.module("${moduleName}")
     .directive('footer', [function () {
         return {
             restrict: 'E',

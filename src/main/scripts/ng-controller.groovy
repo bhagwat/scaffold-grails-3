@@ -7,12 +7,18 @@ description("Generates Angular artifacts for a domain class") {
 
 def model = model(args[0])
 def overwrite = flag('force') ? true : false
+final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
+final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
+final String publicFolderPath = config.getProperty("ng-scaffold.base.dir", String) ?: "public"
+Map mapModel=[moduleName: moduleName, moduleDescription: moduleDescription]
+mapModel.putAll(model.asMap())
 
 render template: "angular/form.controller.gsp",
-        destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.form.controller.js"),
-        model: model
+        destination: file("${publicFolderPath}/src/app/modules/${model.propertyName}/${model.propertyName}.form.controller.js"),
+        model: mapModel,
+        overwrite: overwrite
 
 render template: "angular/list.controller.gsp",
-        destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.list.controller.js"),
-        model: model,
+        destination: file("${publicFolderPath}/src/app/modules/${model.propertyName}/${model.propertyName}.list.controller.js"),
+        model: mapModel,
         overwrite: overwrite

@@ -7,8 +7,13 @@ description("Generates Angular route for a domain class") {
 
 model = model(args[0])
 def overwrite = flag('force') ? true : false
+final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
+final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
+final String publicFolderPath = config.getProperty("ng-scaffold.base.dir", String) ?: "public"
+Map mapModel=[moduleName: moduleName, moduleDescription: moduleDescription]
+mapModel.putAll(model.asMap())
 
 render template: "angular/route.gsp",
-        destination: file("/public/src/app/modules/${model.propertyName}/${model.propertyName}.route.js"),
-        model: model,
+        destination: file("${publicFolderPath}/src/app/modules/${model.propertyName}/${model.propertyName}.route.js"),
+        model: mapModel,
         overwrite: overwrite

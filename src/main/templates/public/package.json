@@ -1,14 +1,11 @@
 {
-  "name": "benchmark",
+  "name": "${moduleName}",
+  "description": "${moduleDescription}",
   "version": "1.0.0",
-  "description": "Benchmark Frontend applicaton",
-  "author": {
-    "name": "Aliyun Team"
-  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+http://gitlab.intelligrape.net/alicloud/benchmark.git"
+    "url": "git+https://github.com/bhagwat/scaffold-grails-3.git"
   },
   "dependencies": {
     "browser-sync": "~2.11.2",

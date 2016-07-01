@@ -1,7 +1,7 @@
 (function () {
     'use strict';
-    angular.module('app')
-        .factory('DomainServiceFactory', ["$resource", "Configuration", function ($resource, Configuration) {
+    angular.module("${moduleName}")
+        .factory('DomainServiceFactory', ["\$resource", "Configuration", function (\$resource, Configuration) {
             return function (url, paramDefaults, actions, options) {
                 var resourceActions = {
                     create: {method: 'GET', params: {action: 'create'}},
@@ -13,7 +13,7 @@
                 };
                 angular.extend(resourceActions, actions);
 
-                return $resource(
+                return \$resource(
                     Configuration.API + url,
                     paramDefaults || null,
                     resourceActions,

@@ -4,7 +4,7 @@ var gulp = require('gulp');
 
 var paths = gulp.paths;
 
-var $ = require('gulp-load-plugins')();
+var dollor = require('gulp-load-plugins')();
 
 gulp.task('styles', function () {
 
@@ -24,29 +24,29 @@ gulp.task('styles', function () {
       filePath = filePath.replace(paths.src + '/app/', '');
       filePath = filePath.replace(paths.src + '/components/', '../components/');
       filePath = filePath.replace(paths.src + '/modules/', '../modules/');
-      return '@import \'' + filePath + '\';';
+      return "@import '" + filePath + "';";
     },
     starttag: '// injector',
     endtag: '// endinjector',
     addRootSlash: false
   };
 
-  var indexFilter = $.filter('index.scss');
+  var indexFilter = dollor.filter('index.scss');
 
   return gulp.src([
     paths.src + '/app/index.scss',
     paths.src + '/app/vendor.scss'
   ])
     .pipe(indexFilter)
-    .pipe($.inject(injectFiles, injectOptions))
+    .pipe(dollor.inject(injectFiles, injectOptions))
     .pipe(indexFilter.restore())
-    .pipe($.rubySass(sassOptions)
+    .pipe(dollor.rubySass(sassOptions)
       .on('error', function (err) {
         console.error('Error!', err.message);
       })
     )
 
-  .pipe($.autoprefixer())
+  .pipe(dollor.autoprefixer())
     .on('error', function handleError(err) {
       console.error(err.toString());
       this.emit('end');

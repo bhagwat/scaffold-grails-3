@@ -6,8 +6,13 @@ description("Creates a new angular directive") {
 
 model = model(args[0])
 def overwrite = flag('force') ? true : false
+final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
+final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
+final String publicFolderPath = config.getProperty("ng-scaffold.base.dir", String) ?: "public"
+Map mapModel=[moduleName: moduleName, moduleDescription: moduleDescription]
+mapModel.putAll(model.asMap())
 
 render template: "angular/directive.gsp",
-        destination: file("/public/src/app/components/directives/${model.propertyName}.js"),
-        model: model,
+        destination: file("${publicFolderPath}/src/app/components/directives/${model.propertyName}.js"),
+        model: mapModel,
         overwrite: overwrite

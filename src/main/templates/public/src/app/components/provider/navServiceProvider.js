@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app')
+angular.module("${moduleName}")
     .provider('navService', function () {
 
         var _root = {items: []};
@@ -18,8 +18,8 @@ angular.module('app')
 
         var self = this;
 
-        self.setStateProvider = function ($stateProvider) {
-            _sateProvider = $stateProvider
+        self.setStateProvider = function (\$stateProvider) {
+            _sateProvider = \$stateProvider
         };
 
         self.getRoot = function () {
@@ -55,7 +55,7 @@ angular.module('app')
             return null;
         };
 
-        this.$get = function () {
+        this.\$get = function () {
             return self;
         };
     });
