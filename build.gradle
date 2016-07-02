@@ -43,6 +43,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
     compile "javax.servlet:javax.servlet-api"
+    compile "javax.annotation:javax.annotation-api:1.2"
     console "org.grails:grails-console"
     profile "org.grails.profiles:plugin"
     provided "org.grails:grails-plugin-services"

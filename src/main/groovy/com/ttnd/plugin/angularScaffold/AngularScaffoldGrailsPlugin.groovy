@@ -4,7 +4,9 @@ import grails.plugins.Plugin
 import groovy.text.GStringTemplateEngine
 import groovy.text.markup.MarkupTemplateEngine
 import groovy.text.markup.TemplateConfiguration
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class AngularScaffoldGrailsPlugin extends Plugin {
     def grailsVersion = "3.1.0 > *"
     def pluginExcludes = ["grails-app/views/error.gsp"]
@@ -29,24 +31,17 @@ class AngularScaffoldGrailsPlugin extends Plugin {
                 autoNewLine = true
                 useDoubleQuotes = true
             }
+
+            scaffoldTemplateCache(ScaffoldTemplateCache)
             scaffoldGStringTemplateEngine(GStringTemplateEngine)
             scaffoldMarkupTemplateEngine(MarkupTemplateEngine, ref('scaffoldTemplateConfiguration'))
-            scaffoldTemplateCache(ScaffoldTemplateCache)
+
+            if (config.getProperty("ng-scaffold.cors.enabled", Boolean, true)) {
+                log.debug "Adding once per request CORS filter"
+                applicationCorsFilter(ApplicationCorsFilter)
+            } else {
+                log.debug "Plugin provided CORS filter is disabled.Set `ng-scaffold.cors.enabled=true` to enable it."
+            }
         }
-    }
-
-    void doWithDynamicMethods() {
-    }
-
-    void doWithApplicationContext() {
-    }
-
-    void onChange(Map<String, Object> event) {
-    }
-
-    void onConfigChange(Map<String, Object> event) {
-    }
-
-    void onShutdown(Map<String, Object> event) {
     }
 }
