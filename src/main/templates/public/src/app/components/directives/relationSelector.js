@@ -7,11 +7,11 @@ angular.module("${moduleName}")
             scope: {ngModel: "=", remoteUrl: '@', ngClass: '@', manyToMany: "="},
             require: 'ngModel',
             templateUrl: 'app/components/directives/views/relationSelector.html',
-            controller: ["\$http", "Configuration", "\$scope", function (\$http, Configuration, \$scope) {
+            controller: ["\$http", "Configuration", "\$scope", function (http, Configuration, scope) {
                 var vm = this;
-                \$http({
+                http({
                     method: 'GET',
-                    url: Configuration.API + \$scope.remoteUrl,
+                    url: Configuration.API + scope.remoteUrl,
                     params: {max: 30}
                 }).then(function successCallback(response) {
                     vm.entities = response.data;

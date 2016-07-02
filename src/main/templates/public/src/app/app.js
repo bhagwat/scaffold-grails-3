@@ -31,17 +31,17 @@ var MenuItem = function (index) {
     'use strict';
     angular.module("${moduleName}", ['ngResource', 'ngAnimate', 'toastr', 'ui.bootstrap', 'ui.router','mwl.confirm'])
         .config(["\$urlRouterProvider", "\$stateProvider", "navServiceProvider",
-            function (\$urlRouterProvider, \$stateProvider, navServiceProvider) {
-            navServiceProvider.setStateProvider(\$stateProvider);
-            navServiceProvider.setRoot(
-                new MenuItem(10)
-                    .setState('home', {
-                        templateUrl: 'app/layout.html',
-                        title: "General",
-                        icon: 'home'
-                    })
-            );
-            \$urlRouterProvider.when('', '/');
+            function (urlRouterProvider, stateProvider, navServiceProvider) {
+            navServiceProvider.setStateProvider(stateProvider);
+                navServiceProvider.setRoot(
+                    new MenuItem(10)
+                        .setState('home', {
+                            templateUrl: 'app/layout.html',
+                            title: "General",
+                            icon: 'home'
+                        })
+                );
+                urlRouterProvider.when('', '/application/info');
         }])
         .constant('_', window._)
         .service("Configuration", [function () {

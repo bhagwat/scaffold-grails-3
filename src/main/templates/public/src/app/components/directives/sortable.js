@@ -24,7 +24,7 @@ angular.module("${moduleName}")
                     siblings.removeClass('sorting_desc');
                     siblings.addClass('sorting');
                     element.removeClass('sorting');
-                    element.addClass("sorting_"+sortOrder);
+                    element.addClass("sorting_" + sortOrder);
                     scope.sortOrder = sortOrder;
                     scope.onChange({sortField: scope.sortField, sortOrder: scope.sortOrder});
                 })

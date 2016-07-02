@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Info</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table dataTable table-striped table-bordered">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="(name, value) in applicationCtrl.applicationInfo.info">
+                                    <td>
+                                        <span data-ng-bind="name"></span>
+                                    </td>
+                                    <td>
+                                        <span data-ng-bind="value"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

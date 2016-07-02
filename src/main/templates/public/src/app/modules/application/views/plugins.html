@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Plugins</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table dataTable table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Version</th>
+                                    <th>Enabled</th>
+                                    <th>Title</th>
+                                    <th>Documentation</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="plugin in applicationCtrl.applicationInfo.plugins">
+                                    <td>
+                                        <span data-ng-bind="$index + 1"></span>
+                                    </td>
+                                    <td>
+                                        <span data-ng-bind="plugin.name"></span>
+                                    </td>
+                                    <td>
+                                        <span data-ng-bind="plugin.version"></span>
+                                    </td>
+                                    <td>
+                                        <span data-ng-bind="plugin.enabled"></span>
+                                    </td>
+                                    <td>
+                                        <span data-ng-if="plugin.title" data-ng-bind="plugin.title"></span>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" data-ng-href="{{plugin.link}}" data-ng-if="plugin.link"><span data-ng-bind="plugin.link"></span></a>
+                                    </td>
+                                    <td>
+                                        <span data-ng-if="plugin.description" data-ng-bind="plugin.description"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
