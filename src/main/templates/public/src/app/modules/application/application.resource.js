@@ -3,6 +3,6 @@
 
 angular.module("$moduleName")
     .factory("Application", ["DomainServiceFactory", function (DomainServiceFactory) {
-        return DomainServiceFactory("/application/:action/:id", {"id": "@id"});
+        return DomainServiceFactory("/applicationMetric/:action/:id", {"id": "@id"});
     }]);
 })();

@@ -15,6 +15,9 @@
                                 <tbody>
                                 <tr data-ng-repeat="(name, value) in applicationCtrl.applicationInfo.info">
                                     <td>
+                                        <span data-ng-bind="\$index + 1"></span>
+                                    </td>
+                                    <td>
                                         <span data-ng-bind="name"></span>
                                     </td>
                                     <td>
