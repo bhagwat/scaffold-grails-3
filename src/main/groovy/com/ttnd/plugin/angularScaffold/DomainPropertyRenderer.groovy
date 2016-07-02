@@ -220,9 +220,9 @@ class DomainPropertyRenderer {
     private String renderManyToOne() {
         if (property.association) {
             Map attributes = [
-                    "data-ng-model"    : "formCtrl.${domainInstanceName}.${property.name}.id",
+                    "data-ng-model"    : "formCtrl.${domainInstanceName}.${property.fieldName}.id",
                     "relation-selector": "",
-                    "remote-url"       : "/${property.name}/list",
+                    "remote-url"       : "/${property.fieldName}/list",
                     "many-to-many"     : "false"
             ]
             return renderSelectBox(attributes, [])
@@ -305,15 +305,16 @@ class DomainPropertyRenderer {
     }
 
     private String renderDateEditor() {
-        scaffoldTemplateCache.renderAsHTML(attributes: [
+        String propertyName = property.name
+        scaffoldTemplateCache.renderWidget(attributes: [
                 "type"                : "text",
-                "id"                  : property.name,
-                "name"                : property.name,
+                "id"                  : propertyName,
+                "name"                : propertyName,
+                "data-ng-model"       : "formCtrl.${domainInstanceName}.${propertyName}",
                 "uib-datepicker-popup": "yyyy-MM-dd",
-                "is-open"             : "formCtrl.datePopupOpen.${property.name}",
-                "data-ng-click"       : "formCtrl.datePopupOpen.${property.name}=!formCtrl.datePopupOpen.${property.name}"
+                "is-open"             : "formCtrl.datePopupOpen.${propertyName}",
+                "data-ng-click"       : "formCtrl.datePopupOpen.${propertyName}=!formCtrl.datePopupOpen.${propertyName}"
         ], "widget/datepicker",)
-
     }
 
     private String renderSelectTypeEditor(type) {
@@ -345,7 +346,7 @@ class DomainPropertyRenderer {
         if (isRequired()) {
             attributes.put("required", "")
         }
-        scaffoldTemplateCache.renderAsHTML(attributes: attributes, options: options, "widget/selectbox",)
+        scaffoldTemplateCache.renderWidget(attributes: attributes, options: options, "widget/selectbox",)
     }
 
     public boolean isRequired() {

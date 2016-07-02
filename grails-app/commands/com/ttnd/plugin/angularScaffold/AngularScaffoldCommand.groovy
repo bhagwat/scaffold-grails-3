@@ -4,10 +4,13 @@ import grails.core.GrailsApplication
 import grails.core.GrailsDomainClass
 import grails.dev.commands.ApplicationCommand
 import grails.dev.commands.ExecutionContext
+import grails.util.BuildSettings
 import groovy.text.markup.MarkupTemplateEngine
+import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 
+@CompileStatic
 class AngularScaffoldCommand implements ApplicationCommand {
     @Autowired
     GrailsApplication grailsApplication
@@ -23,6 +26,9 @@ class AngularScaffoldCommand implements ApplicationCommand {
 
     @Value('${ng-scaffold.module.description}')
     String moduleDescription
+
+    @Value('${ng-scaffold.base.dir:public}')
+    String publicBaseDir
 
     boolean handle(ExecutionContext ctx) {
         String[] args = ctx.commandLine.remainingArgsArray
@@ -44,7 +50,7 @@ class AngularScaffoldCommand implements ApplicationCommand {
         }
 
         grailsDomainClasses.each { GrailsDomainClass grailsDomainClass ->
-            println "Generating angular artifacts for domain for ${grailsDomainClass.naturalName} ..."
+            println "| Generating angular artifacts for domain: ${grailsDomainClass.naturalName} ..."
             List<DomainPropertyRenderer> domainProperties = DomainPropertyRenderer.getDomainProperties(grailsDomainClass, scaffoldTemplateCache, markupTemplateEngine)
             Map model = [
                     domainClass      : grailsDomainClass,
@@ -54,11 +60,21 @@ class AngularScaffoldCommand implements ApplicationCommand {
                     moduleName       : moduleName,
                     moduleDescription: moduleDescription
             ]
-            scaffoldTemplateCache.renderAsString(model, "list",
-                    "modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.list.html")
-            scaffoldTemplateCache.renderAsString(model, "form",
-                    "modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.form.html")
+            renderTemplate(model, "list", grailsDomainClass, ctx.commandLine.hasOption("force"))
+            renderTemplate(model, "form", grailsDomainClass, ctx.commandLine.hasOption("force"))
         }
         return true
+    }
+
+    private void renderTemplate(Map model, String template, GrailsDomainClass grailsDomainClass, Boolean override) {
+        String destinationFilePath = "$publicBaseDir/src/app/modules/${grailsDomainClass.propertyName}/views/${grailsDomainClass.propertyName}.${template}.html"
+        File destinationFile = new File(BuildSettings.BASE_DIR, destinationFilePath)
+        if (!override && destinationFile.exists()) {
+            println "| Warning Destination file $destinationFilePath already exists, skipping..."
+            return
+        }
+        destinationFile.parentFile.mkdirs()
+        scaffoldTemplateCache.renderAsString(model, template, destinationFile)
+        println "| Rendered template ${template}.gsp to destination $destinationFilePath"
     }
 }

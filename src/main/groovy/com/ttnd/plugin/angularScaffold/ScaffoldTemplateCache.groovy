@@ -6,7 +6,6 @@ import groovy.text.TemplateEngine
 import groovy.text.markup.MarkupTemplateEngine
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ResourceLoaderAware
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
@@ -23,19 +22,19 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
     @Autowired
     MarkupTemplateEngine scaffoldMarkupTemplateEngine
 
-    @Value('${ng-scaffold.base.dir:public}')
-    String publicBaseDir
-
     private final String SOURCE_TEMPLATE_FOLDER_PATH = "src/main/templates/angular/"
     private final String SOURCE_TEMPLATE_META_INF_PATH = "classpath:META-INF/templates/angular/"
 
-    public File renderAsString(Map model, String source, String destinationFilePath) {
+    public File renderAsString(Map model, String source, File destinationFile) {
         Writable writable = getWritable(scaffoldGStringTemplateEngine, model, source)
-        saveGeneratedTemplate(destinationFilePath, writable)
+        destinationFile.withWriter {
+            writable.writeTo(it)
+        }
+        return destinationFile
     }
 
-    public StringWriter renderAsHTML(Map model, String source) {
-        return render(scaffoldMarkupTemplateEngine, model, source)
+    public StringWriter renderWidget(Map model, String widgetPath) {
+        return render(scaffoldMarkupTemplateEngine, model, widgetPath)
     }
 
     private StringWriter render(TemplateEngine templateEngine, Map model, String source) {
@@ -57,28 +56,5 @@ class ScaffoldTemplateCache implements ResourceLoaderAware {
             throw new FileNotFoundException("Requested template ${path} does not found.")
         }
         return resource
-    }
-
-    private File saveGeneratedTemplate(String destination, Writable writable) {
-        File file = findOrCreateDestinationFile(destination)
-        file.withWriter {
-            writable.writeTo(it)
-        }
-        return file
-    }
-
-    private File findOrCreateDestinationFile(String destinationFilePath) {
-        String absoluteFilePath = publicBasePath + destinationFilePath
-        File destinationFile = new File(absoluteFilePath)
-        destinationFile.parentFile.mkdirs()
-        destinationFile
-    }
-
-    private String getPublicBasePath() {
-        String basePath = BuildSettings.BASE_DIR.absolutePath + publicBaseDir
-        if (!basePath.endsWith(File.separator)) {
-            basePath = basePath + File.separator
-        }
-        return basePath
     }
 }
