@@ -42,10 +42,12 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
+    compile "javax.servlet:javax.servlet-api"
     console "org.grails:grails-console"
     profile "org.grails.profiles:plugin"
     provided "org.grails:grails-plugin-services"
     provided "org.grails:grails-plugin-domain-class"
+    provided "org.grails:grails-plugin-controllers"
     testCompile "org.grails:grails-plugin-testing"
 }
 
