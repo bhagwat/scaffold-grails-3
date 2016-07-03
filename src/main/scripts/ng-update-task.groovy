@@ -15,7 +15,7 @@ if (settingsGradle.exists()) {
 
 if (settingsGradle.text.indexOf(subProject) < 0) {
     executionContext.console.info("| Adding gradle sub project: ${subProject} into settings.gradle file")
-    settingsGradle << "incude '$subProject'"
+    settingsGradle << "include '$subProject'"
 }
 
 String buildText = buildGradle.text
