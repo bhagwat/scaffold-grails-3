@@ -13,13 +13,13 @@ import org.springframework.core.io.ResourceLoader
 
 @CompileStatic
 class ScaffoldTemplateCache implements ResourceLoaderAware {
-    @Autowired
+    @Autowired(required = false)
     ResourceLoader resourceLoader
 
-    @Autowired
+    @Autowired(required = false)
     GStringTemplateEngine scaffoldGStringTemplateEngine
 
-    @Autowired
+    @Autowired(required = false)
     MarkupTemplateEngine scaffoldMarkupTemplateEngine
 
     private final String SOURCE_TEMPLATE_FOLDER_PATH = "src/main/templates/angular/"

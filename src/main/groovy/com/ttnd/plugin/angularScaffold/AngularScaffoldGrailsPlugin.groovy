@@ -1,6 +1,7 @@
 package com.ttnd.plugin.angularScaffold
 
 import grails.plugins.Plugin
+import grails.util.Environment
 import groovy.text.GStringTemplateEngine
 import groovy.text.markup.MarkupTemplateEngine
 import groovy.text.markup.TemplateConfiguration
@@ -25,16 +26,22 @@ class AngularScaffoldGrailsPlugin extends Plugin {
 
     Closure doWithSpring() {
         { ->
-            scaffoldTemplateConfiguration(TemplateConfiguration) {
-                autoEscape = true
-                autoIndent = true
-                autoNewLine = true
-                useDoubleQuotes = true
-            }
+            if (Environment.isDevelopmentRun()) {
 
-            scaffoldTemplateCache(ScaffoldTemplateCache)
-            scaffoldGStringTemplateEngine(GStringTemplateEngine)
-            scaffoldMarkupTemplateEngine(MarkupTemplateEngine, ref('scaffoldTemplateConfiguration'))
+                scaffoldTemplateConfiguration(TemplateConfiguration) {
+                    autoEscape = true
+                    autoIndent = true
+                    autoNewLine = true
+                    useDoubleQuotes = true
+                }
+
+                scaffoldTemplateCache(ScaffoldTemplateCache)
+                scaffoldGStringTemplateEngine(GStringTemplateEngine)
+                scaffoldMarkupTemplateEngine(MarkupTemplateEngine, ref('scaffoldTemplateConfiguration'))
+
+            } else {
+                log.debug "Skipping scaffoldGenerator bean definitions for non-dev environments"
+            }
 
             if (config.getProperty("ng-scaffold.cors.enabled", Boolean, true)) {
                 log.debug "Adding once per request CORS filter"
