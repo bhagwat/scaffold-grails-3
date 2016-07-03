@@ -26,8 +26,12 @@ for (UrlResource resource : templates('public*//**')) {
                     model: module,
                     overwrite: overwrite
         } else {
-            fileSystemInteraction.mkdir(destination.parentFile)
-            fileSystemInteraction.copy(resource, destination.parentFile)
+            if (!overwrite && destination.exists()) {
+                executionContext.console.warn("Destination file ${targetFilePath} already exists, skipping...")
+            } else {
+                fileSystemInteraction.mkdir(destination.parentFile)
+                fileSystemInteraction.copy(resource, destination.parentFile)
+            }
         }
     }
 }

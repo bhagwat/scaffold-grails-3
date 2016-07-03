@@ -2,7 +2,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Info</h2>
+                <h2><span data-ng-bind="title"></span></h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -10,15 +10,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table dataTable table-striped table-bordered">
-                                <thead>
-                                </thead>
                                 <tbody>
-                                <tr data-ng-repeat="(name, value) in applicationCtrl.applicationInfo.info">
+                                <tr data-ng-repeat="(name, value) in data">
                                     <td>
                                         <span data-ng-bind="\$index + 1"></span>
                                     </td>
                                     <td>
-                                        <span data-ng-bind="name"></span>
+                                        <span data-ng-bind="name|camelCaseToHuman"></span>
                                     </td>
                                     <td>
                                         <span data-ng-bind="value"></span>
