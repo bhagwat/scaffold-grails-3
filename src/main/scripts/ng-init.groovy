@@ -5,6 +5,7 @@ description("""Copies angular resources in 'public' or the folder path specified
     flag name: 'force', description: "Whether to overwrite existing files"
 }
 
+def console = executionContext.console
 def overwrite = flag('force') ? true : false
 final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
 final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
@@ -27,7 +28,7 @@ for (UrlResource resource : templates('public*//**')) {
                     overwrite: overwrite
         } else {
             if (!overwrite && destination.exists()) {
-                executionContext.console.warn("Destination file ${targetFilePath} already exists, skipping...")
+                console.warn("| Destination file ${targetFilePath} already exists, skipping...")
             } else {
                 fileSystemInteraction.mkdir(destination.parentFile)
                 fileSystemInteraction.copy(resource, destination.parentFile)
@@ -36,9 +37,24 @@ for (UrlResource resource : templates('public*//**')) {
     }
 }
 
-ant.rename(src: "${publicFolderPath}/gitignore", dest: "${publicFolderPath}/.gitignore")
+if (!overwrite && new File("${publicFolderPath}/.gitignore").exists()) {
+    console.warn("| Skipping create .gitignore file for sub project.")
+} else {
+    console.info("| Adding .gitingore file for sub project")
+    ant.rename(src: "${publicFolderPath}/gitignore", dest: "${publicFolderPath}/.gitignore")
+}
 
 ant.delete(file: "${publicFolderPath}/gitignore")
-["bower_components", "node_modules", "nodejs"].each { ant.mkdir(dir: "$publicFolderPath/$it") }
+
+["bower_components", "node_modules", "nodejs"].each {
+    if (new File("$publicFolderPath/$it").exists()) {
+        console.warn("| Skipping create folder for destination: $publicFolderPath/$it which already exists.")
+    } else {
+        console.info("| Creating folder $publicFolderPath/$it")
+        ant.mkdir(dir: "$publicFolderPath/$it")
+    }
+}
+
+ngUpdateTask()
 
 consoleLogger.addStatus("... done.")
