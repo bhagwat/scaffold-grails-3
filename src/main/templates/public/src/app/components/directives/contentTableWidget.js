@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("myApplication")
+angular.module("${moduleName}")
     .directive('contentTableWidget', [function () {
         return {
             restrict: 'E',

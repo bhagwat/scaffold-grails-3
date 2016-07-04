@@ -18,8 +18,8 @@ angular.module("${moduleName}")
 
         var self = this;
 
-        self.setStateProvider = function (\$stateProvider) {
-            _sateProvider = \$stateProvider
+        self.setStateProvider = function (stateProvider) {
+            _sateProvider = stateProvider
         };
 
         self.getRoot = function () {
@@ -55,7 +55,7 @@ angular.module("${moduleName}")
             return null;
         };
 
-        this.\$get = function () {
+        this['\$get'] = function () {
             return self;
         };
     });
