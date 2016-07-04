@@ -4,10 +4,18 @@
 Creates a separate gradle project for managing fronend app. Uses gulp as build tool. Project can be built using Gradle as well. Plugin creates a build.gradle file  with tasks for runnig app locally as a separate application. It updates the root project build.gradle to include the newly added subproject as a dependency and updates jar/war task accordingly to build the frontend app as well. 
 ## Install plugin
 
-Add dependency
+Add dependency in both dependencies and buildScript dependency section:
 
 ```
-    console "org.grails:ng-scaffold:0.1"
+buildscript {
+    dependencies {
+        classpath "org.grails.plugins:ng-scaffold:0.1"
+    }
+}
+
+dependencies {
+    compile "org.grails.plugins:ng-scaffold:0.1"
+}
 ```
 
 ## Configuration
@@ -140,3 +148,8 @@ Adds angular directive
 
 Adds angular filter
 
+# Development mode instructions:
+
+```
+
+ ```
