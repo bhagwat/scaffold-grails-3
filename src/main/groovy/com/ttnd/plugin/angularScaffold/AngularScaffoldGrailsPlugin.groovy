@@ -20,9 +20,8 @@ class AngularScaffoldGrailsPlugin extends Plugin {
     def documentation = "http://grails.org/plugin/angular-scaffold"
     def license = "APACHE"
     def organization = [name: "TO THE NEW Digital", url: "http://www.tothenew.com"]
-    def developers = [[name: "Sagarmal Sankara", email: "sagarmal.sankar@tothenew.com"]]
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def issueManagement = [system: "GIT", url: "https://github.com/bhagwat/scaffold-grails-3/issues"]
+    def scm = [url: "https://github.com/bhagwat/scaffold-grails-3"]
 
     Closure doWithSpring() {
         { ->
