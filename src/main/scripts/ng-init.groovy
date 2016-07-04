@@ -6,7 +6,7 @@ description("""Copies angular resources in 'public' or the folder path specified
 }
 
 def console = executionContext.console
-def overwrite = flag('force') ? true : false
+final Boolean overwrite = flag('force')
 final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
 final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
 final String publicFolderPath = config.getProperty("ng-scaffold.base.dir", String) ?: "public"
@@ -37,7 +37,7 @@ for (UrlResource resource : templates('public*//**')) {
     }
 }
 
-if (!overwrite && new File("${publicFolderPath}/.gitignore").exists()) {
+if (!overwrite && file("${publicFolderPath}/.gitignore").exists()) {
     console.warn("| Skipping create .gitignore file for sub project.")
 } else {
     console.info("| Adding .gitingore file for sub project")
@@ -47,7 +47,7 @@ if (!overwrite && new File("${publicFolderPath}/.gitignore").exists()) {
 ant.delete(file: "${publicFolderPath}/gitignore")
 
 ["bower_components", "node_modules", "nodejs"].each {
-    if (new File("$publicFolderPath/$it").exists()) {
+    if (file("$publicFolderPath/$it").exists()) {
         console.warn("| Skipping create folder for destination: $publicFolderPath/$it which already exists.")
     } else {
         console.info("| Creating folder $publicFolderPath/$it")

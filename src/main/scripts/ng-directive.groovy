@@ -4,8 +4,8 @@ description("Creates a new angular directive") {
     flag name: 'force', description: "Whether to overwrite existing files"
 }
 
-model = model(args[0])
-def overwrite = flag('force') ? true : false
+def model = model(args[0])
+final Boolean overwrite = flag('force')
 final String moduleName = config.getProperty("ng-scaffold.module.name", String) ?: "public"
 final String moduleDescription = config.getProperty("ng-scaffold.module.description", String) ?: "Public application"
 final String publicFolderPath = config.getProperty("ng-scaffold.base.dir", String) ?: "public"

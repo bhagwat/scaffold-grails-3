@@ -3,8 +3,8 @@ description("Creates sub project for ng-scaffold application") {
 }
 
 String subProject = config.getProperty("ng-scaffold.base.dir", String) ?: "public"
-File buildGradle = new File("build.gradle")
-File settingsGradle = new File("settings.gradle")
+File buildGradle = file("build.gradle")
+File settingsGradle = file("settings.gradle")
 
 if (settingsGradle.exists()) {
     executionContext.console.info("| Found settings.gradle file in project root.")
