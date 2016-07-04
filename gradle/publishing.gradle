@@ -1,0 +1,12 @@
+bintray {
+    pkg {
+        userOrg = ''
+        name = "$project.group:$project.name"
+        issueTrackerUrl = "https://github.com/bhagwat/grails-$project.name/issues"
+        vcsUrl = "https://github.com/bhagwat/grails-$project.name"
+        version {
+            attributes = ['grails-plugin': "$project.group:$project.name"]
+            name = project.version
+        }
+    }
+}
