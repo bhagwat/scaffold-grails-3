@@ -25,9 +25,9 @@ class DomainPropertyRenderer {
         this.scaffoldTemplateCache = scaffoldTemplateCache
         this.markupTemplateEngine = markupTemplateEngine
         this.property = property
-        domainClass = property.domainClass
-        constrainedProperty = (ConstrainedProperty) domainClass.constrainedProperties[property.name]
-        domainInstanceName = domainClass.propertyName
+        this.domainClass = property.domainClass
+        this.constrainedProperty = (ConstrainedProperty) domainClass.constrainedProperties[property.name]
+        this.domainInstanceName = domainClass.propertyName
     }
 
     static List<DomainPropertyRenderer> getDomainProperties(GrailsDomainClass grailsDomainClass, ScaffoldTemplateCache scaffoldTemplateCache, MarkupTemplateEngine markupTemplateEngine) {

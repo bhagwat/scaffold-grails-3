@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Value
 
 @CompileStatic
 class AngularScaffoldCommand implements ApplicationCommand {
-    @Autowired
+    @Autowired(required = false)
     GrailsApplication grailsApplication
 
-    @Autowired
+    @Autowired(required = false)
     ScaffoldTemplateCache scaffoldTemplateCache
 
-    @Autowired
+    @Autowired(required = false)
     MarkupTemplateEngine markupTemplateEngine
 
     @Value('${ng-scaffold.module.name}')

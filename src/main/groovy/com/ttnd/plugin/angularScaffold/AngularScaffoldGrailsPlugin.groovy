@@ -25,7 +25,8 @@ class AngularScaffoldGrailsPlugin extends Plugin {
 
     Closure doWithSpring() {
         { ->
-            if (Environment.DEVELOPMENT) {
+            log.debug("Current environment: "+ Environment.current)
+            if (Environment.isDevelopmentMode()) {
 
                 scaffoldTemplateConfiguration(TemplateConfiguration) {
                     autoEscape = true
