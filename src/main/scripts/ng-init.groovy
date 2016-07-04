@@ -30,7 +30,9 @@ for (UrlResource resource : templates('public*//**')) {
             if (!overwrite && destination.exists()) {
                 console.warn("| Destination file ${targetFilePath} already exists, skipping...")
             } else {
-                fileSystemInteraction.mkdir(destination.parentFile)
+                if (!destination.getParentFile().exists()) {
+                    destination.getParentFile().mkdirs()
+                }
                 fileSystemInteraction.copy(resource, destination.parentFile)
             }
         }
@@ -55,6 +57,6 @@ ant.delete(file: "${publicFolderPath}/gitignore")
     }
 }
 
-ngUpdateTask()
+ngUpdateTask(*args)
 
-consoleLogger.addStatus("... done.")
+addStatus "... done."

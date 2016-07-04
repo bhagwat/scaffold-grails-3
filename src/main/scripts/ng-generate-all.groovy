@@ -7,8 +7,9 @@ description("Generates Angular module with the CRUD artifacts for a domain class
 
 def model = model(args[0])
 
-ngRoute(args.join(' '))
-ngResource(args.join(' '))
-ngController(args.join(' '))
+ngRoute(*args)
+ngResource(*args)
+ngController(*args)
+ngRestfulController(*args)
 
 angularScaffold("${model.fullName}")
