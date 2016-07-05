@@ -4,7 +4,7 @@ angular.module("${moduleName}")
     .directive('relationSelector', [function () {
         return {
             restrict: 'A',
-            scope: {ngModel: "=", remoteUrl: '@', ngClass: '@', manyToMany: "="},
+            scope: {ngModel: "=", remoteUrl: '@', ngClass: '@', manyToMany: "=", optionKey: "@", optionValue: "@"},
             require: 'ngModel',
             templateUrl: 'app/components/directives/views/relationSelector.html',
             controller: ["\$http", "Configuration", "\$scope", function (http, Configuration, scope) {

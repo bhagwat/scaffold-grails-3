@@ -219,12 +219,8 @@ class DomainPropertyRenderer {
 
     private String renderManyToOne() {
         if (property.association) {
-            Map attributes = [
-                    "data-ng-model"    : "formCtrl.${domainInstanceName}.${property.fieldName}.id",
-                    "relation-selector": "",
-                    "remote-url"       : "/${property.fieldName}/list",
-                    "many-to-many"     : "false"
-            ]
+            Map attributes = getRelationWidgetAttributes()
+            attributes.put("many-to-many", "false")
             return renderSelectBox(attributes, [])
         } else {
             ""
@@ -240,14 +236,22 @@ class DomainPropertyRenderer {
         }
 
         if (cls != null) {
-            Map attributes = [
-                    "relation-selector": "",
-                    "remote-url"       : "/${cls.name}/list",
-                    "multiple"         : "multiple"
-            ]
+            Map attributes = getRelationWidgetAttributes()
+            attributes.put("multiple", "multiple")
+            attributes.put("remote-url", "${property.naturalName}")
             return renderSelectBox(attributes, [])
         }
         ""
+    }
+
+    private Map getRelationWidgetAttributes() {
+        [
+                "data-ng-model"    : "formCtrl.${domainInstanceName}.${property.fieldName}.id",
+                "relation-selector": "",
+                "remote-url"       : "/${property.name}/autoComplete",
+                "data-option-key"  : "id",
+                "data-option-value": "display",
+        ]
     }
 
     private String renderOneToMany() {
