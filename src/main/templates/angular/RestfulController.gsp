@@ -17,7 +17,7 @@ class ${className}Controller extends RestfulController<${className}> {
 
     def autoComplete(Integer max) {
         params.max = Math.min(max ?: 50, 100)
-        respond ${className}.createCriteria().list(params).collect{
+        respond ${className}.createCriteria().list(params){}.collect{
             [id: it.id, display: it.toString()]
         }
     }
