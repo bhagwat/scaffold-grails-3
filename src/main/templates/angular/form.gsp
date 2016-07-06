@@ -35,7 +35,6 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <br>
                                 <button
                                         data-ng-show="formCtrl.${propertyName}.id"
                                         class="btn btn-danger"
@@ -56,8 +55,8 @@
                                 <button type="submit"
                                         data-ng-click="editForm.\$valid && formCtrl.save${className}()"
                                         class="btn btn-success">
-                                    <span data-ng-hide="formCtrl.person.id">Save</span>
-                                    <span data-ng-show="formCtrl.person.id">Update</span>
+                                    <span data-ng-hide="formCtrl.${propertyName}.id">Save</span>
+                                    <span data-ng-show="formCtrl.${propertyName}.id">Update</span>
                                 </button>
                             </div>
                         </div>
