@@ -1,11 +1,13 @@
 package com.ttnd.plugin.angularScaffold
 
+import grails.converters.JSON
 import grails.plugins.Plugin
 import grails.util.Environment
 import groovy.text.GStringTemplateEngine
 import groovy.text.markup.MarkupTemplateEngine
 import groovy.text.markup.TemplateConfiguration
 import groovy.util.logging.Slf4j
+import org.grails.web.converters.configuration.ObjectMarshallerRegisterer
 
 @Slf4j
 class AngularScaffoldGrailsPlugin extends Plugin {
@@ -34,6 +36,13 @@ class AngularScaffoldGrailsPlugin extends Plugin {
                     useDoubleQuotes = true
                 }
 
+                scaffoldTemplateConfiguration(TemplateConfiguration) {
+                    autoEscape = true
+                    autoIndent = true
+                    autoNewLine = true
+                    useDoubleQuotes = true
+                }
+
                 scaffoldTemplateCache(ScaffoldTemplateCache)
                 scaffoldGStringTemplateEngine(GStringTemplateEngine)
                 scaffoldMarkupTemplateEngine(MarkupTemplateEngine, ref('scaffoldTemplateConfiguration'))
@@ -47,6 +56,16 @@ class AngularScaffoldGrailsPlugin extends Plugin {
                 applicationCorsFilter(ApplicationCorsFilter)
             } else {
                 log.debug "Plugin provided CORS filter is disabled.Set `ng-scaffold.cors.enabled=true` to enable it."
+            }
+            if (config.getProperty("ng-scaffold.marshaller.enum.enabled", Boolean, true)) {
+                log.debug "Adding EnumMarshaller to exclude enum class property from JSON"
+                enumMarshaller(EnumMarshaller)
+                enumMarshallerRegisterer(ObjectMarshallerRegisterer) {
+                    marshaller = { EnumMarshaller om -> }
+                    converterClass = JSON
+                }
+            } else {
+                log.debug "Plugin provided EnumMarshaller is disabled. Set `ng-scaffold.marshaller.enum.enabled=true` to enable it."
             }
         }
     }
