@@ -30,10 +30,10 @@
                             <div class="col-sm-6">
                                 <div class="dataTables_length">
                                     <label>Show
-                                        <select ng-model="listCtrl.pageSize" aria-controls="datatable"
+                                        <select data-ng-model="listCtrl.pageSize" aria-controls="datatable"
                                                 class="form-control input-sm"
-                                                ng-change="listCtrl.options.currentPage=1; listCtrl.pageChanged()"
-                                                ng-options="option as option for option in [5,10,20,30,50, 60]"></select>
+                                                data-ng-change="listCtrl.options.currentPage=1; listCtrl.pageChanged()"
+                                                data-ng-options="option as option for option in [5,10,20,30,50, 60]"></select>
                                         entries</label>
                                 </div>
                             </div>
@@ -49,9 +49,9 @@
                                 <table class="table dataTable table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th sort-field="id" on-change="listCtrl.sortChanged(sortField, sortOrder)">ID</th>
+                                        <th data-sort-field="id" data-on-change="listCtrl.sortChanged(sortField, sortOrder)">ID</th>
                                         <% fields.each{field ->%>
-                                        <th sort-field="${field.property.name}" on-change="listCtrl.sortChanged(sortField, sortOrder)">
+                                        <th data-sort-field="${field.property.name}" data-on-change="listCtrl.sortChanged(sortField, sortOrder)">
                                             ${field.property.naturalName}
                                         </th>
                                         <% } %>
@@ -62,9 +62,11 @@
                                     <tr data-ng-repeat="${propertyName} in listCtrl.listData.instances">
                                         <td><span data-ng-bind="${propertyName}.id"></span></td>
                                         <% fields.each{field ->%>
-                                        <td><span data-ng-bind="${field.renderRead()}"></span></td>
+                                        <td>
+                                        ${field.renderRead()}
+                                        </td>
                                         <% } %>
-                                        <td><span><a ui-sref="home.${propertyName}.edit({ id: ${propertyName}.id })"> Edit</a></span></td>
+                                        <td><span><a data-ui-sref="home.${propertyName}.edit({ id: ${propertyName}.id })"> Edit</a></span></td>
                                     </tr>
                                     </tbody>
                                 </table>

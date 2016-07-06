@@ -72,17 +72,12 @@ class DomainPropertyRenderer {
             out << renderSelectTypeEditor("locale")
         else if (property.type == Currency)
             out << renderSelectTypeEditor("currency")
-        else if (property.type == ([] as Byte[]).class) //TODO: Bug in groovy means i have to do this :(
-            out << renderByteArrayEditor()
-        else if (property.type == ([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
+        else if (property.type == ([] as Byte[]).class || property.type == ([] as byte[]).class)
             out << renderByteArrayEditor()
         else if (property.manyToOne || property.oneToOne)
             out << renderManyToOne()
         else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
-            def str = renderManyToMany()
-            if (str != null) {
-                out << str
-            }
+            out << renderManyToMany()
         } else if (property.oneToMany) {
             out << renderOneToMany()
         }
@@ -92,35 +87,46 @@ class DomainPropertyRenderer {
     public Writer renderRead() {
         Writer out = new StringWriter()
         if (property.type == Boolean || property.type == boolean)
-            out << "${domainInstanceName}.${property.name}" //TODO: as asBoolean filter
+            out << "{{${domainInstanceName}.${property.name}}}"
         else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean))
-            out << "${domainInstanceName}.${property.name}|number"
+            out << "{{${domainInstanceName}.${property.name}|number}}"
         else if (property.type == String)
-            out << "${domainInstanceName}.${property.name}"
+            out << "{{${domainInstanceName}.${property.name}}}"
         else if (property.type == Date || property.type == java.sql.Date || property.type == Time || property.type == Calendar)
-            out << "${domainInstanceName}.${property.name}|date"
+            out << "{{${domainInstanceName}.${property.name}|date}}"
         else if (property.type == URL)
-            out << "${domainInstanceName}.${property.name}"
+            out << "{{${domainInstanceName}.${property.name}}}"
         else if (property.type && property.isEnum())
-            out << "${domainInstanceName}.${property.name}" //TODO: asEnum filter
+            out << "{{${domainInstanceName}.${property.name}.name}}"
         else if (property.type == TimeZone)
-            out << "${domainInstanceName}.${property.name}"
+            out << "{{${domainInstanceName}.${property.name}}}"
         else if (property.type == Locale)
-            out << "${domainInstanceName}.${property.name}"
+            out << "{{${domainInstanceName}.${property.name}}}"
         else if (property.type == Currency)
-            out << renderSelectTypeEditor("currency")  //TODO: as currency filter
-        else if (property.type == ([] as Byte[]).class) //TODO: Bug in groovy means i have to do this :(
-            out << "${domainInstanceName}.${property.name}"
-        else if (property.type == ([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
-            out << ""
-        else if (property.manyToOne || property.oneToOne)
-            out << ""
-        else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
-            out << ""
+            out << "{{${domainInstanceName}.${property.name}|currency}}"
+        else if (property.type == ([] as Byte[]).class || property.type == ([] as byte[]).class)
+            out << "{{${domainInstanceName}.${property.name}}}"
+        else if (property.manyToOne || property.oneToOne) {
+            out << renderTemplate(
+                    domainInstanceName: domainInstanceName,
+                    property: property,
+                    "widget/association")
+        } else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
+            out << renderTemplate(
+                    domainInstanceName: domainInstanceName,
+                    property: property,
+                    "widget/manyToMany")
         } else if (property.oneToMany) {
-            out << ""
+            out << renderTemplate(
+                    domainInstanceName: domainInstanceName,
+                    property: property,
+                    "widget/manyToMany")
         }
         out
+    }
+
+    String renderTemplate(Map model, String template) {
+        scaffoldTemplateCache.renderWidget(model, template)
     }
 
     String getMarkup(Map model, String template) {
@@ -238,43 +244,30 @@ class DomainPropertyRenderer {
         if (cls != null) {
             Map attributes = getRelationWidgetAttributes()
             attributes.put("multiple", "multiple")
-            attributes.put("remote-url", "${property.naturalName}")
             return renderSelectBox(attributes, [])
+        } else {
+            return ""
         }
-        ""
     }
 
     private Map getRelationWidgetAttributes() {
         [
-                "data-ng-model"    : "formCtrl.${domainInstanceName}.${property.fieldName}.id",
-                "relation-selector": "",
-                "remote-url"       : "/${property.name}/autoComplete",
-                "data-option-key"  : "id",
-                "data-option-value": "display",
+                "data-ng-model"  : "formCtrl.${domainInstanceName}.${property.name}",
+                "data-remote-url": "/${property.referencedDomainClass.propertyName}/autoComplete",
+                "class"          : "form-control col-md-7 col-xs-12",
+                "id"             : property.name,
+                "name"           : property.name,
+                "data-options"   : "formCtrl.${property.name}.options",
+                "data-ng-options": "option as option.display for option in formCtrl.${property.name}.options track by option.id"
         ]
     }
 
     private String renderOneToMany() {
-        //TODO: to be implemented
-/*
-        StringWriter sw = new StringWriter()
-        PrintWriter pw = new PrintWriter(sw)
-        pw.println()
-        pw.println '<ul class="one-to-many">'
-        pw.println "<g:each in=\"\${${domainInstanceName}?.${property.name}?}\" var=\"${property.name[0]}\">"
-        pw.println "    <li><g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"show\" id=\"\${${property.name[0]}.id}\">\${${property.name[0]}?.encodeAsHTML()}</g:link></li>"
-        pw.println '</g:each>'
-        pw.println '<li class="add">'
-        pw.println "<g:link controller=\"${property.referencedDomainClass.propertyName}\" action=\"create\" params=\"['${domainClass.propertyName}.id': ${domainInstanceName}?.id]\">\${message(code: 'default.add.label', args: [message(code: '${property.referencedDomainClass.propertyName}.label', default: '${property.referencedDomainClass.shortName}')])}</g:link>"
-        pw.println '</li>'
-        pw.println '</ul>'
-        return sw.toString()
-*/
-        return ""
+        renderManyToMany()
     }
 
     private String renderRangeSelector(Range range) {
-        Map model = ["ng-options": "number for number in [] | range:${range.from}:${range.to} track by \$index".toString()]
+        Map model = ["data-ng-options": "number for number in [] | range:${range.from}:${range.to} track by \$index".toString()]
         if (required) {
             model.put("required", "")
         }
@@ -300,7 +293,7 @@ class DomainPropertyRenderer {
     }
 
     private String renderBooleanEditor() {
-        Map model = ["type": "checkbox", "ng-true-value": "true", "ng-false-value": "false"]
+        Map model = ["type": "checkbox", "data-ng-true-value": "true", "data-ng-false-value": "false"]
         if (constrainedProperty && constrainedProperty.widget) {
             model.putAll([widget: constrainedProperty.widget])
             model.putAll(constrainedProperty.attributes)
@@ -310,15 +303,20 @@ class DomainPropertyRenderer {
 
     private String renderDateEditor() {
         String propertyName = property.name
-        scaffoldTemplateCache.renderWidget(attributes: [
-                "type"                : "text",
-                "id"                  : propertyName,
-                "name"                : propertyName,
-                "data-ng-model"       : "formCtrl.${domainInstanceName}.${propertyName}",
-                "uib-datepicker-popup": "yyyy-MM-dd",
-                "is-open"             : "formCtrl.datePopupOpen.${propertyName}",
-                "data-ng-click"       : "formCtrl.datePopupOpen.${propertyName}=!formCtrl.datePopupOpen.${propertyName}"
-        ], "widget/datepicker",)
+        Map model = [
+                "data-ng-model"            : "formCtrl.${domainInstanceName}.${propertyName}",
+                "id"                       : propertyName,
+                "name"                     : propertyName,
+                "type"                     : "text",
+                "class"                    : "form-control well well-sm",
+                "data-uib-datepicker-popup": "",
+                "data-is-open"             : "formCtrl.datePopupOpen.${propertyName}",
+                "data-ng-click"            : "formCtrl.datePopupOpen.${propertyName}=!formCtrl.datePopupOpen.${propertyName}"
+        ]
+        if (required) {
+            model.put("required", "")
+        }
+        scaffoldTemplateCache.renderWidget(attributes: model, "widget/datepicker",)
     }
 
     private String renderSelectTypeEditor(type) {
@@ -330,19 +328,19 @@ class DomainPropertyRenderer {
     }
 
     private String renderEnumEditor() {
-        renderSelectBox(property.type.getEnumConstants() as List) {
+        renderSelectBox('data-ng-model': "formCtrl.${domainInstanceName}.${property.name}.name", property.type.getEnumConstants() as List) {
             [id: ((Enum) it).name(), name: ((Enum) it).toString()]
         }
     }
 
     private String renderInListEditor() {
-        renderSelectBox(constrainedProperty.inList) {
+        renderSelectBox([:], constrainedProperty.inList) {
             [id: it.toString(), name: it.toString()]
         }
     }
 
-    private String renderSelectBox(List items, Closure closure) {
-        renderSelectBox([:], items.collect(closure))
+    private String renderSelectBox(Map attributes, List items, Closure closure) {
+        renderSelectBox(attributes, items.collect(closure))
     }
 
     private String renderSelectBox(Map attributes, List options) {

@@ -3,8 +3,7 @@
 
 angular.module("$moduleName")
 .controller("${className}ListCtrl",
-    ["${className}", "\$state", "toastr",
-        function (${className}, \$state, toastr) {
+    ["${className}", "toastr", function (${className}, toastr) {
             var self = this;
             self.pageSize = 5;
             self.options = {};

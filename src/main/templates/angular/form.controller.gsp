@@ -13,7 +13,7 @@ angular.module("$moduleName")
             };
 
             self.save${className} = function () {
-                    ${className}.save({${propertyName}: self.${propertyName}},
+                    ${className}.save(self.${propertyName},
                     function (${propertyName}) {
                         self.errorData = null;
                         toastr.success("${className} " + (\$stateParams.id ? 'updated' : 'saved') + " successfully.", "Update");
